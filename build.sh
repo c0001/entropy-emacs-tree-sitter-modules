@@ -19,7 +19,7 @@ set -e
 lang="$1"
 lang_abbrev_name="$lang"
 topdir="$_TREESIT_MK_DIR"
-
+declare soext
 if [ "$(uname)" == "Darwin" ]
 then
     soext="dylib"
@@ -32,7 +32,7 @@ fi
 
 echo "========== Building ${lang} ... =========="
 
-### Retrieve sources
+# * Retrieve sources
 
 org="tree-sitter"
 modules_dir="${topdir}/modules"
@@ -40,6 +40,10 @@ repo="tree-sitter-${lang}"
 repodir="${modules_dir}/${repo}"
 sourcedir="${repodir}/src"
 grammardir="$repodir"
+
+if [ ! -d "$modules_dir" ]; then
+    mkdir -p "$modules_dir"
+fi
 
 function echo_job_info ()
 {
@@ -124,11 +128,22 @@ if [ ! -e "${grammardir}"/grammar.js ]; then
     cp -v "${grammardir}"/grammar.js "${sourcedir}/"
 fi
 
+# * PREPARATION
+case "$lang" in
+    sql)
+        cd "${repodir}"
+        echo_job_info "generating source"
+        tree-sitter generate
+        ;;
+    *)
+        :
+        ;;
+esac
+
+# * Build
 # We have to go into the source directory to compile, because some
 # C files refer to files like "../../common/scanner.h".
 cd "${sourcedir}"
-
-### Build
 
 cc -fPIC -c -I. parser.c
 # Compile scanner.c.
