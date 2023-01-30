@@ -71,6 +71,9 @@ case "${lang}" in
     "glsl")
         org="theHamsta"
         ;;
+    "go-mod")
+        org="camdencheek"
+        ;;
     "make")
         org="alemuller"
         ;;
