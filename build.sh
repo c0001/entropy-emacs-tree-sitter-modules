@@ -17,6 +17,7 @@ set -u
 set -e
 
 lang="$1"
+lang_abbrev_name="$lang"
 topdir="$_TREESIT_MK_DIR"
 
 if [ "$(uname)" == "Darwin" ]
@@ -73,6 +74,7 @@ case "${lang}" in
         ;;
     "go-mod")
         org="camdencheek"
+        lang_abbrev_name="gomod"
         ;;
     "make")
         org="alemuller"
@@ -145,15 +147,15 @@ fi
 echo_job_info "linkage module with system libs"
 if test -f scanner.cc
 then
-    c++ -fPIC -shared *.o -o "libtree-sitter-${lang}.${soext}"
+    c++ -fPIC -shared *.o -o "libtree-sitter-${lang_abbrev_name}.${soext}"
 else
-    cc -fPIC -shared *.o -o "libtree-sitter-${lang}.${soext}"
+    cc -fPIC -shared *.o -o "libtree-sitter-${lang_abbrev_name}.${soext}"
 fi
 
 ### Copy out
 echo_job_info "make dist"
 mkdir -p "${topdir}/dist"
-cp "libtree-sitter-${lang}.${soext}" "${topdir}/dist"
+cp "libtree-sitter-${lang_abbrev_name}.${soext}" "${topdir}/dist/"
 echo_job_info "return to top dir ${topdir}"
 cd "${topdir}"
 echo "========== Build ${lang} done =========="
