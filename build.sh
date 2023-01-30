@@ -168,9 +168,15 @@ else
 fi
 
 ### Copy out
+declare dist_fname="libtree-sitter-${lang_abbrev_name}.${soext}"
+declare dist_dest="${topdir}/dist/${dist_fname}"
 echo_job_info "make dist"
 mkdir -p "${topdir}/dist"
-cp "libtree-sitter-${lang_abbrev_name}.${soext}" "${topdir}/dist/"
+if [ -f "${dist_dest}" ]
+then
+    rm -v "${dist_dest}"
+fi
+cp -v ./"$dist_fname" "$dist_dest"
 echo_job_info "return to top dir ${topdir}"
 cd "${topdir}"
 echo "========== Build ${lang} done =========="
