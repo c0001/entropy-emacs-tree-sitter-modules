@@ -30,6 +30,29 @@ else
     soext="so"
 fi
 
+declare platform='${uname}'
+platform="$(uname)"
+if [ "$platform" = Linux ]
+then
+    platform=linux
+elif [ "$platform" = Darwin ]
+then
+    platform=macos
+elif cat "$platform" | grep -q "MINGW" > /dev/null
+then
+    platform=windows
+fi
+treesit_cli_curl_url="https://github.com/tree-sitter/tree-sitter/releases/latest/download/tree-sitter-${platform}-x64.gz"
+treesit_cli_dir="${topdir}"/treesit-cli
+treesit_cli_bin="${treesit_cli_dir}"/tree-sitter
+if [ ! -f "$treesit_cli_bin" ]
+then
+    echo  "========== Install tree-sitter cli tool =========="
+    mkdir -p "$treesit_cli_dir"
+    curl -Ls "$treesit_cli_curl_url" | gzip -cd > "$treesit_cli_bin"
+    chmod +x "$treesit_cli_bin"
+fi
+
 echo "========== Building ${lang} ... =========="
 
 # * Retrieve sources
@@ -133,7 +156,7 @@ case "$lang" in
     sql)
         cd "${repodir}"
         echo_job_info "generating source"
-        tree-sitter generate
+        "$treesit_cli_bin" generate
         ;;
     *)
         :
