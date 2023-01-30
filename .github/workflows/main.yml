@@ -38,7 +38,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          name: ${{ github.ref }}
+          name: "[2023-01-30 Mon 15:04:08]"
           draft: true
           files: |
             libs-*.zip
