@@ -9,6 +9,9 @@ on:
     branches: [ entropy-emacs ]
   pull_request:
     branches: [ entropy-emacs ]
+  schedule:
+    # build test every day once for tracking modules updates
+    - cron:  '0 0 * * 1'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
