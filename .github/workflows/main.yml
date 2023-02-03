@@ -46,7 +46,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          name: "2023-01-30 Mon 15:20:17"
+          name: "PreBuilt (CI)"
           draft: true
           files: |
             entropy-emacs_treesit-grammars-*.zip
