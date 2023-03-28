@@ -36,6 +36,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set Env (Top)
+        run: |
+          echo "RELEASE_DATE=$(date -u +'%Y%m%d%H%M%S')" >> ${GITHUB_ENV}
+          echo "RELEASE_VERSION=$(cat version)"          >> ${GITHUB_ENV}
+      - name: Set Env (Tag)
+        run: |
+          echo "RELEASE_TAGNAME=CI/${{ github.ref_name }}/v${{ env.RELEASE_VERSION }}/${{ env.RELEASE_DATE }}" >> ${GITHUB_ENV}
       - name: Install coreutils for macOS
         if: matrix.os == 'macos-latest'
         run: brew install coreutils
@@ -46,10 +53,19 @@ jobs:
           export relname="entropy-emacs_treesit-grammars-${platform}-x64"
           zip -r "${relname}.zip" dist
           sha256sum -b "${relname}.zip" > "${relname}.zip.sha256"
+      - name: "Create latest pre-release tag"
+        uses: rickstaa/action-create-tag@v1
+        id: "tag_create"
+        with:
+          tag: ${{ env.RELEASE_TAGNAME }}
+          tag_exists_error: true
+          no_verify_tag: false
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          name: "PreBuilt (CI)"
+          name: "PreBuilt (CI: dev) ${{ env.RELEASE_VERSION }}/${{ env.RELEASE_DATE }}"
+          tag_name: ${{ env.RELEASE_TAGNAME }}
+          prerelease: true
           draft: true
           files: |
             entropy-emacs_treesit-grammars-*.zip

@@ -1,5 +1,6 @@
 *
 README
+!version
 !emacs-module.h
 !tree-sitter-lang.in
 !batch.sh.old
