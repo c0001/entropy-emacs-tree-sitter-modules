@@ -63,6 +63,7 @@ repo="tree-sitter-${lang}"
 repodir="${modules_dir}/${repo}"
 sourcedir="${repodir}/src"
 grammardir="$repodir"
+branch=''
 
 if [ ! -d "$modules_dir" ]; then
     mkdir -p "$modules_dir"
@@ -119,7 +120,14 @@ case "${lang}" in
         org="mitchellh"
         ;;
     "sql")
+        org="DerekStride"
+        branch="gh-pages"
+        ;;
+    "sql-postgre")
         org="m-novikov"
+        lang_abbrev_name="postgre-sql"
+        repo="tree-sitter-sql"
+        repodir="${modules_dir}/${repo}-postgre"
         ;;
     "toml")
         org="ikatyang"
@@ -137,23 +145,35 @@ esac
 
 if [ ! -e "$repodir" ]; then
     echo_job_info "clone module"
-    git clone "https://github.com/${org}/${repo}.git" \
-        --depth 1 --quiet "$repodir"
+    if [ -z "$branch" ]; then
+        git clone "https://github.com/${org}/${repo}.git" \
+            --depth 1 --quiet "$repodir"
+    else
+        git clone "https://github.com/${org}/${repo}.git" \
+            --single-branch --branch "${branch}" \
+            --quiet "${repodir}"
+    fi
 else
     cd "$repodir"
     echo_job_info "clean module project"
-    git clean -xfd .
-    echo_job_info "git update module project"
-    git pull --rebase
-fi
-if [ ! -e "${grammardir}"/grammar.js ]; then
-    echo_job_info "copy grammemr.js to src"
-    cp -v "${grammardir}"/grammar.js "${sourcedir}/"
+    git reset HEAD --hard
+    echo_job_info "git fetch module project"
+    git fetch --all
+    if [ -z "$branch" ]; then
+        if git branch -va | grep origin/main 1>/dev/null 2>&1
+        then
+            branch=main
+        else
+            branch=master
+        fi
+    fi
+    echo_job_info "git checkout out $branch of module project"
+    git checkout origin/"$branch"
 fi
 
 # * PREPARATION
 case "$lang" in
-    sql)
+    sql-postgre)
         cd "${repodir}"
         echo_job_info "generating source"
         "$treesit_cli_bin" generate
