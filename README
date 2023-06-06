@@ -1,9 +1,3 @@
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-I should clarify that this module is NOT a standalone tree-sitter
-module. It is supposed to be used with an upcoming tree-sitter
-integration in Emacs core.
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 To build the language definition for a particular language, run
 
     ./build.sh <language>
