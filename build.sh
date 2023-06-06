@@ -182,11 +182,14 @@ fi
 
 # * PREPARATION
 case "$lang" in
-    sql-postgre)
-        cd "${repodir}"
-        echo_job_info "generating source"
-        "$treesit_cli_bin" generate
-        ;;
+    # NOTE: For some module need to bootstrap by treesit-cli before
+    # compiling, use following demo
+    #
+    # SOME-LANG)
+    #     cd "${repodir}"
+    #     echo_job_info "generating source"
+    #     "$treesit_cli_bin" generate
+    #     ;;
     *)
         :
         ;;
