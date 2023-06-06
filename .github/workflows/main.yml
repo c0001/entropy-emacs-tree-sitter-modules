@@ -29,7 +29,10 @@ jobs:
       fail-fast: true
       matrix:
         os:
-          - macos-latest
+          # FIXME: remove macos temporarily since its github action
+          # image as no docker support
+          #
+          # - macos-latest
           - ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
