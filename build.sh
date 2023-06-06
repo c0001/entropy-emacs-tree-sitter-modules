@@ -75,11 +75,14 @@ function echo_job_info ()
 }
 
 case "${lang}" in
-    "dockerfile")
-        org="camdencheek"
-        ;;
     "cmake")
         org="uyha"
+        ;;
+    "dart")
+        org="ast-grep"
+        ;;
+    "dockerfile")
+        org="camdencheek"
         ;;
     "typescript")
         sourcedir="${repodir}/typescript/src"
@@ -90,6 +93,9 @@ case "${lang}" in
         repodir="${modules_dir}/${repo}"
         sourcedir="${repodir}/tsx/src"
         grammardir="${repodir}/tsx"
+        ;;
+    "elisp")
+        org="Wilfred"
         ;;
     "elixir")
         org="elixir-lang"
@@ -118,6 +124,9 @@ case "${lang}" in
         ;;
     "proto")
         org="mitchellh"
+        ;;
+    "surface")
+        org="connorlay"
         ;;
     "sql")
         org="DerekStride"
