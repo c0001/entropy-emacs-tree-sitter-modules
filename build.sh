@@ -53,7 +53,7 @@ then
     chmod +x "$treesit_cli_bin"
 fi
 
-echo "========== Building ${lang} ... =========="
+echo -e "\n========== Building ${lang} ... =========="
 
 # * Retrieve sources
 
@@ -71,10 +71,13 @@ fi
 
 function echo_job_info ()
 {
-    echo "--> [$repo] $1 ..."
+    echo "--> [${repo}] $1 ..."
 }
 
 case "${lang}" in
+    "clojure")
+        org="dannyfreeman"
+        ;;
     "cmake")
         org="uyha"
         ;;
@@ -100,15 +103,24 @@ case "${lang}" in
     "elixir")
         org="elixir-lang"
         ;;
-    "heex")
-        org="phoenixframework"
-        ;;
     "glsl")
         org="theHamsta"
         ;;
     "go-mod")
         org="camdencheek"
         lang_abbrev_name="gomod"
+        ;;
+    "heex")
+        org="phoenixframework"
+        ;;
+    "janet-simple")
+        org="sogaiu"
+        ;;
+    "kotlin")
+        org="fwcd"
+        ;;
+    "lua")
+        org="MunifTanjim"
         ;;
     "make")
         org="alemuller"
@@ -125,8 +137,11 @@ case "${lang}" in
     "proto")
         org="mitchellh"
         ;;
-    "surface")
-        org="connorlay"
+    "scss")
+        org="serenadeai"
+        ;;
+    "souffle")
+        org="chaosite"
         ;;
     "sql")
         org="DerekStride"
@@ -137,6 +152,9 @@ case "${lang}" in
         lang_abbrev_name="postgre-sql"
         repo="tree-sitter-sql"
         repodir="${modules_dir}/${repo}-postgre"
+        ;;
+    "surface")
+        org="connorlay"
         ;;
     "toml")
         org="ikatyang"
@@ -152,13 +170,15 @@ case "${lang}" in
         ;;
 esac
 
+repourl="https://github.com/${org}/${repo}.git"
+
 if [ ! -e "$repodir" ]; then
-    echo_job_info "clone module"
+    echo_job_info "clone module: ${repourl} ..."
     if [ -z "$branch" ]; then
-        git clone "https://github.com/${org}/${repo}.git" \
+        git clone "$repourl" \
             --depth 1 --quiet "$repodir"
     else
-        git clone "https://github.com/${org}/${repo}.git" \
+        git clone "$repourl" \
             --single-branch --branch "${branch}" \
             --quiet "${repodir}"
     fi
